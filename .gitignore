@@ -37,3 +37,4 @@ out/
 *.pgp
 *.gpg
 secrets.*
+junction-core/
