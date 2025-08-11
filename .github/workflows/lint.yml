@@ -1,0 +1,19 @@
+name: checks
+on:
+  push:
+  pull_request:
+
+jobs:
+  basic-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate sample CSV headers
+        run: |
+          python3 tools/validate_csv.py schemas/payment_intent_v1.schema.json samples/payment_intent_logistics_example.csv
+          python3 tools/validate_csv.py schemas/payment_intent_v1.schema.json samples/payment_intent_logistics_complex_example.csv
+      - name: Run demo script on example
+        run: |
+          mkdir -p out
+          python3 demo/demo_runner.py samples/payment_intent_logistics_example.csv out/recommendations_demo.csv
+          head -n 5 out/recommendations_demo.csv

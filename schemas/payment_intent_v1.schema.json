@@ -1,0 +1,25 @@
+{
+  "required_columns": [
+    "company_code",
+    "vendor_id",
+    "invoice_document",
+    "fiscal_year",
+    "line_item",
+    "invoice_date",
+    "due_date",
+    "payment_terms",
+    "currency",
+    "amount",
+    "reference",
+    "line_item_text",
+    "vendor_country",
+    "priority",
+    "refundability_required",
+    "preferred_rail",
+    "allow_fallback"
+  ],
+  "optional_columns": [
+    "rtp_available",
+    "batch_id"
+  ]
+}

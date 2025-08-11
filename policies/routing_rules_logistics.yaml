@@ -1,0 +1,49 @@
+version: 0.1
+context:
+  vertical: logistics_b2b_ap
+  geography: US_domestic_only
+  pilot_mode: decision_only
+
+identifiers:
+  rails: [ach, ach_same_day, rtp, wire, card]
+
+defaults:
+  inst_amount_max: 5000
+  ach_sameday_amount_max: 100000
+  high_value_threshold: 50000
+  fees:
+    ach_next_day_fixed: 0.25
+    ach_same_day_fixed: 1.25
+    rtp_fixed: 0.50
+    wire_fixed: 15.00
+    card_mdr_bps: 250
+
+policy_order:
+  - name: cross_border_gate
+    when: "vendor_country != 'US'"
+    then: { action: "ROUTE", rail: "wire", reason: "CROSS_BORDER" }
+
+  - name: high_value_wire
+    when: "amount >= high_value_threshold"
+    then: { action: "ROUTE", rail: "wire", reason: "HIGH_VALUE" }
+
+  - name: urgent_small_rtp
+    when: "priority in ['urgent','high'] and amount <= inst_amount_max and rtp_available == true"
+    then: { action: "ROUTE", rail: "rtp", reason: "URGENT_SMALL" }
+
+  - name: refundability_card
+    when: "refundability_required == 'yes'"
+    then: { action: "ROUTE", rail: "card", reason: "REFUNDABILITY" }
+
+  - name: high_priority_sameday_ach
+    when: "priority == 'high' and amount <= ach_sameday_amount_max"
+    then: { action: "ROUTE", rail: "ach_same_day", reason: "HIGH_PRIORITY" }
+
+  - name: default_domestic_ach
+    when: "true"
+    then: { action: "ROUTE", rail: "ach", reason: "DEFAULT_DOMESTIC" }
+
+fallbacks:
+  - name: rtp_unavailable_fallback
+    when: "selected_rail == 'rtp' and rtp_available == false"
+    then: { action: "ROUTE", rail: "ach_same_day", reason: "FALLBACK_RTP_DOWN" }
