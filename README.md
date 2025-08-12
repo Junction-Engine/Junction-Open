@@ -1,6 +1,6 @@
 # Junction (Open) — SAP AP Rail Recommendation (SFTP-first)
 
-[![CodeQL](https://github.com/Junction-Engine/Junction-Open.git/actions/workflows/codeql.yml/badge.svg)](https://github.com/Junction-Engine/Junction-Open.git/actions/workflows/codeql.yml)
+[![CodeQL](https://github.com/Junction-Engine/Junction-Open.git/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/Junction-Engine/Junction-Open.git/actions/workflows/codeql.yml)
 
 ## Overview
 
