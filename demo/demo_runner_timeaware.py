@@ -1,27 +1,6 @@
-
 #!/usr/bin/env python3
 import sys, csv, os, collections, datetime as dt
 import argparse
-from datetime import datetime as _dt
-try:
-    from dateutil import parser as _dtparse  # add to deps
-except Exception:
-    _dtparse = None
-
-def _cli():
-    p = argparse.ArgumentParser(
-        prog="junction-demo",
-        description="Time-aware AP rail recommendation (Junction Open)"
-    )
-    p.add_argument("input_csv")
-    p.add_argument("output_csv")
-    p.add_argument("cutoffs_yaml", nargs="?")
-    p.add_argument("--fee-catalog", dest="fee", default=None)
-    p.add_argument("--bank", dest="bank", default=None)
-    p.add_argument("--tz", default=None)
-    p.add_argument("--now", default=None,
-                  help='ISO timestamp, e.g. "2025-07-15T15:00:00-04:00"')
-    return p.parse_args()
 
 # --- simple fee defaults (overridden by fee catalog if present) ---
 fees = {
@@ -47,32 +26,29 @@ def estimate_fee(rail, amount):
     if rail == "check": return fees["check_fixed"]
     return 0.0
 
-def parse_args(argv):
-    """
-    argv: script in out [maybe fee_catalog.yaml bank] [maybe cutoffs.yaml] [--tz ZONE]
-    Return: dict with keys: fee_catalog, bank, cutoffs, tz
-    """
-    out = {"fee_catalog": None, "bank": None, "cutoffs": None, "tz": None}
-    i = 3
-    while i < len(argv):
-        a = argv[i]
-        if a == "--tz":
-            if i+1 < len(argv): out["tz"] = argv[i+1]
-            i += 2
-            continue
-        if a.endswith((".yml", ".yaml")):
-            # treat as fee catalog only if followed by a non-yaml, non-flag token (bank name)
-            if out["fee_catalog"] is None and i+1 < len(argv) and (not argv[i+1].startswith("--")) and (not argv[i+1].endswith((".yml",".yaml"))):
-                out["fee_catalog"], out["bank"] = a, argv[i+1]
-                i += 2
-                continue
-            # otherwise it's the cutoffs file
-            if out["cutoffs"] is None:
-                out["cutoffs"] = a
-                i += 1
-                continue
-        i += 1
-    return out
+def _cli():
+    p = argparse.ArgumentParser(
+        prog="junction-demo",
+        description="Time-aware AP rail recommendation (Junction Open)"
+    )
+    p.add_argument("input_csv")
+    p.add_argument("output_csv")
+    p.add_argument("cutoffs_yaml", nargs="?")
+    p.add_argument("--fee-catalog", dest="fee", default=None)
+    p.add_argument("--bank", dest="bank", default=None)
+    p.add_argument("--tz", default=None)
+    p.add_argument("--now", default=None,
+                  help='ISO timestamp, e.g. "2025-07-15T15:00:00-04:00"')
+    return p.parse_args()
+
+def _opts_from_args(args):
+    return {
+        "fee_catalog": args.fee,
+        "bank": args.bank,
+        "cutoffs": args.cutoffs_yaml,
+        "tz": args.tz,
+        "now": args.now,
+    }
 
 def maybe_load_fee_catalog(path, bank):
     global fees, inst_amount_max, ach_sameday_amount_max, high_value_threshold
@@ -90,11 +66,9 @@ def maybe_load_fee_catalog(path, bank):
         print(f"Warning: fee catalog load failed: {e}")
 
 def main():
-    if len(sys.argv) < 3:
-        print("Usage: python3 -m demo.demo_runner_timeaware <input_csv> <output_csv> [fee_catalog.yaml bank] [cutoffs.yaml] [--tz America/New_York]")
-        sys.exit(1)
-    inp, outp = sys.argv[1], sys.argv[2]
-    opts = parse_args(sys.argv)
+    args = _cli()
+    inp, outp = args.input_csv, args.output_csv
+    opts = _opts_from_args(args)
 
     # optional fees + cutoffs
     maybe_load_fee_catalog(opts["fee_catalog"], opts["bank"])
@@ -106,7 +80,16 @@ def main():
         cut = Cutoffs.from_yaml(opts["cutoffs"])
         if opts["tz"]:
             cut.tz = opts["tz"]
-        now = dt.datetime.now(cut.tzinfo())
+        # if --now provided, parse ISO8601 and convert to the cutoff TZ
+        if opts["now"]:
+            try:
+                iso = dt.datetime.fromisoformat(opts["now"])  # e.g., 2025-07-15T15:00:00-04:00
+                now = iso.astimezone(cut.tzinfo()) if iso.tzinfo else iso.replace(tzinfo=cut.tzinfo())
+            except ValueError:
+                print('Invalid --now; expected ISO8601 like "2025-07-15T15:00:00-04:00"')
+                sys.exit(2)
+        else:
+            now = dt.datetime.now(cut.tzinfo())
         print(f"Loaded cutoffs from {opts['cutoffs']} (tz={cut.tz}, holidays={cut.holiday_region})")
 
     # ensure output dir
@@ -162,7 +145,7 @@ def main():
 
             fee = round(estimate_fee(rail, amt), 2)
             # ETA label
-            eta = {"ach":"T+1-T+2 (business)","ach_same_day":"Same day","rtp":"Instant","wire":"Same day","card":"T+1-T+2","check":"T+3-T+7 (mail)"}[rail]
+            eta = {"ach":"T+1-T+2 (business)","ach_same_day":"Same day (ACH)","rtp":"Instant","wire":"Same day","card":"T+1-T+2","check":"T+3-T+7 (mail)"}[rail]
             if cut:
                 eta = cut.eta_label(now, rail)
 
