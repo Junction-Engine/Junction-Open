@@ -1,0 +1,39 @@
+name: update-codeql-badge
+on:
+  workflow_run:
+    workflows: ["codeql"]
+    types: [completed]
+
+permissions:
+  contents: write
+
+jobs:
+  badge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make badge SVG
+        run: |
+          mkdir -p docs
+          if [ "${{ github.event.workflow_run.conclusion }}" = "success" ]; then
+            COLOR="#2ea043"; TEXT="passing"
+          else
+            COLOR="#d73a49"; TEXT="failing"
+          fi
+          cat > docs/codeql-badge.svg <<SVG
+          <svg xmlns="http://www.w3.org/2000/svg" width="150" height="20">
+            <rect width="150" height="20" fill="#24292e"/>
+            <rect x="70" width="80" height="20" fill="${COLOR}"/>
+            <g fill="#fff" font-family="Verdana" font-size="11">
+              <text x="6" y="14">codeql</text>
+              <text x="76" y="14">${TEXT}</text>
+            </g>
+          </svg>
+          SVG
+      - name: Commit badge
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add docs/codeql-badge.svg
+          git commit -m "docs: update codeql badge [skip ci]" || echo "no changes"
+          git push
