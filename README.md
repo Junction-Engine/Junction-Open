@@ -4,10 +4,10 @@
 
 ```mermaid
 flowchart TB
-  s4["S/4HANA(AP open items)"]
-  s4 -->|"CSV/OData (IDs, amounts, dates)"| jn["Junction(policy engine & dashboard)"]
-  jn -->|"Recommendation File -> ZLSCH + reason + est. fee/ETA"| f110["S/4HANA Payment Run(F110/DMEE unchanged)"]
-  f110 -->|"Bank files(NACHA / ISO 20022) go out as today"| banks["Banks / Rails"]
+  s4["S/4HANA (AP open items)"]
+  s4 -->|"CSV/OData (IDs, amounts, dates)"| jn["Junction (policy engine & dashboard)"]
+  jn -->|"Recommendation File -> ZLSCH + reason + est. fee/ETA"| f110["S/4HANA Payment Run (F110/DMEE unchanged)"]
+  f110 -->|"Bank files (NACHA / ISO 20022) go out as today"| banks["Banks / Rails"]
   banks -.->|"optional: acks/returns/statements -> Junction for auto-recon analytics"| jn
 ```
 
