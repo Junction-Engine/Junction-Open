@@ -5,7 +5,7 @@
 into **SAP S/4HANA**. Pilot mode is **decision-only**: you keep your banks & F110 process.
 
 > ⚠️ **Compliance:** Before using with real data, obtain appropriate approvals
-> (Outside Business Activity, OSS/IP, data handling). Do **not** upload bank details or PAN.
+> (OSS/IP, data handling). Do **not** upload bank details or PAN.
 
 ## Quick start (demo)
 ```bash
