@@ -68,3 +68,4 @@ flowchart TB
   jn -->|"Recommendation File → ZLSCH + reason + est. fee/ETA"| f110["S/4HANA Payment Run\n(F110/DMEE unchanged)"]
   f110 -->|"Bank files\n(NACHA / ISO 20022) go out as today"| banks["Banks / Rails"]
   banks -.->|"optional: acks/returns/statements → Junction for auto-recon analytics"| jn
+```
