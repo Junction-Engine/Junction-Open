@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart TB
-  s4["S/4HANA\n(AP open items)"]
+  s4["S/4HANA(AP open items)"]
   s4 -->|"CSV/OData\n(IDs, amounts, dates)"| jn["Junction\n(policy engine & dashboard)"]
   jn -->|"Recommendation File -> ZLSCH + reason + est. fee/ETA"| f110["S/4HANA Payment Run\n(F110/DMEE unchanged)"]
   f110 -->|"Bank files\n(NACHA / ISO 20022) go out as today"| banks["Banks / Rails"]
