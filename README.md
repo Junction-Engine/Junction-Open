@@ -11,7 +11,7 @@ into **SAP S/4HANA**. Pilot mode is **decision-only**: you keep your banks & F11
 ```bash
 # 1) Clone and enter
 git clone <your-repo-url>.git
-cd junction-open
+cd Junction-Open
 
 # 2) Run the demo on a sample file
 python3 demo/demo_runner.py samples/payment_intent_logistics_example.csv out/recommendations_demo.csv
