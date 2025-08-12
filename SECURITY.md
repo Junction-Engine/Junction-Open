@@ -1,6 +1,3 @@
-# Security Policy
 
-- Do **not** include bank account numbers, PAN, or sensitive personal data in sample files.
-- Use key-based SFTP and TLS for any data transfers.
-- Report vulnerabilities to: security@example.com (PGP available on request).
-- We aim to respond within 5 business days.
+# Security Policy
+If you believe you’ve found a vulnerability, please email wenxuan.zhang@stern.nyu.edu and open a GitHub Security Advisory (not a public issue). We aim to acknowledge within 48 hours.
