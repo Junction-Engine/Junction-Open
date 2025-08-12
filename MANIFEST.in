@@ -1,0 +1,4 @@
+include README.md LICENSE NOTICE
+recursive-include calendars *.yaml
+# Uncomment to ship sample CSVs too:
+# recursive-include samples *.csv
