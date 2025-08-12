@@ -7,7 +7,7 @@ jobs:
   basic-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Validate sample CSV headers
         run: |
           python3 tools/validate_csv.py schemas/payment_intent_v1.schema.json samples/payment_intent_logistics_example.csv
