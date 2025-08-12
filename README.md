@@ -73,3 +73,20 @@ Apache-2.0 (see LICENSE).
 
 ## Security
 See **SECURITY.md** for how to report vulnerabilities.
+
+## Time-aware cutoffs demo
+
+Run the same invoice **before** and **after** ACH Same-Day cutoff to see ETA and ZLSCH change.
+
+```bash
+# Before cutoff (uses calendars/cutoffs.sample.yaml)
+python3 -m demo.demo_runner_timeaware samples/demo_cutoff_switch.csv out/recs_before.csv calendars/cutoffs.sample.yaml --tz America/New_York
+
+# After cutoff (forces cutoff passed → next business day)
+python3 -m demo.demo_runner_timeaware samples/demo_cutoff_switch.csv out/recs_after.csv calendars/cutoffs_after.yaml --tz America/New_York
+
+# Quick peek (first two lines of each result)
+sed -n '1,2p' out/recs_before.csv
+sed -n '1,2p' out/recs_after.csv
+
+```

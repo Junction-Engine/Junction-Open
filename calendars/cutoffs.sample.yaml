@@ -1,0 +1,19 @@
+timezone: America/New_York
+holidays:
+  region: US
+rails:
+  ach_next_day:
+    cutoff_local: "17:00"
+    settle_days_business: "1-2"
+  ach_same_day:
+    cutoff_local: "16:15"
+    settle_same_day: true
+  rtp:
+    always_on: true
+  wire:
+    cutoff_local: "17:00"
+    settle_same_day: true
+  card:
+    settle_days_business: "1-2"
+  check:
+    mail_days_business: "3-7"
