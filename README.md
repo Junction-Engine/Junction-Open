@@ -61,3 +61,10 @@ Apache-2.0 (see LICENSE).
 
 ## Security
 See **SECURITY.md** for how to report vulnerabilities.
+```mermaid
+flowchart TB
+  s4["S/4HANA\n(AP open items)"]
+  s4 -->|"CSV/OData\n(IDs, amounts, dates)"| jn["Junction\n(policy engine & dashboard)"]
+  jn -->|"Recommendation File → ZLSCH + reason + est. fee/ETA"| f110["S/4HANA Payment Run\n(F110/DMEE unchanged)"]
+  f110 -->|"Bank files\n(NACHA / ISO 20022) go out as today"| banks["Banks / Rails"]
+  banks -.->|"optional: acks/returns/statements → Junction for auto-recon analytics"| jn
