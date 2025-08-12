@@ -1,6 +1,27 @@
 
 #!/usr/bin/env python3
 import sys, csv, os, collections, datetime as dt
+import argparse
+from datetime import datetime as _dt
+try:
+    from dateutil import parser as _dtparse  # add to deps
+except Exception:
+    _dtparse = None
+
+def _cli():
+    p = argparse.ArgumentParser(
+        prog="junction-demo",
+        description="Time-aware AP rail recommendation (Junction Open)"
+    )
+    p.add_argument("input_csv")
+    p.add_argument("output_csv")
+    p.add_argument("cutoffs_yaml", nargs="?")
+    p.add_argument("--fee-catalog", dest="fee", default=None)
+    p.add_argument("--bank", dest="bank", default=None)
+    p.add_argument("--tz", default=None)
+    p.add_argument("--now", default=None,
+                  help='ISO timestamp, e.g. "2025-07-15T15:00:00-04:00"')
+    return p.parse_args()
 
 # --- simple fee defaults (overridden by fee catalog if present) ---
 fees = {
