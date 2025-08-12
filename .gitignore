@@ -38,3 +38,6 @@ out/
 *.gpg
 secrets.*
 junction-core/
+
+# demo outputs
+out/
