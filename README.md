@@ -7,16 +7,6 @@ into **SAP S/4HANA**. Pilot mode is **decision-only**: you keep your banks & F11
 > ⚠️ **Compliance:** Before using with real data, obtain appropriate approvals
 > (OSS/IP, data handling). Do **not** upload bank details or PAN.
 
-## Overview
-
-```mermaid
-flowchart TB
-  s4["S/4HANA\n(AP open items)"]
-  s4 -->|"CSV/OData\n(IDs, amounts, dates)"| jn["Junction\n(policy engine & dashboard)"]
-  jn -->|"Recommendation File → ZLSCH + reason + est. fee/ETA"| f110["S/4HANA Payment Run\n(F110/DMEE unchanged)"]
-  f110 -->|"Bank files\n(NACHA / ISO 20022) go out as today"| banks["Banks / Rails"]
-  banks -.->|"optional: acks/returns/statements → Junction for auto-recon analytics"| jn
-
 ## Quick start (demo)
 ```bash
 # 1) Clone and enter
