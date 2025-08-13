@@ -114,6 +114,25 @@ def main():
     def before_cutoff(rail: str) -> bool:
         return True if not cut else cut.can_same_day(now, rail)
 
+    def next_cutoff_iso(rail: str) -> str:
+        if not cut:
+            return ""
+        for attr in ("next_cutoff","cutoff_next","deadline","next_deadline"):
+            fn = getattr(cut, attr, None)
+            if callable(fn):
+                try:
+                    t = fn(now, rail)
+                except Exception:
+                    t = None
+                if isinstance(t, dt.datetime):
+                    return t.isoformat()
+        return ""
+
+    def bucket_for(rail: str) -> str:
+        # RTP/Wire early; same-day ACH early only if before cutoff; else late
+        return "EARLY" if (rail in ("rtp","wire") or (rail == "ach_same_day" and before_cutoff("ach_same_day"))) else "LATE"
+
+
     with open(outp, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=out_fields)
         w.writeheader()
@@ -153,6 +172,8 @@ def main():
             if cut:
                 eta = cut.eta_label(now, rail)
 
+            bucket = bucket_for(rail)
+            must_before = next_cutoff_iso(rail) if bucket == "EARLY" else ""
             r.update({"recommended_rail": rail, "recommended_payment_method": method_map[rail], "decision_reason": reason, "estimated_fee": fee, "expected_settlement_time": eta, "f110_bucket": bucket, "must_send_before": must_before})
             w.writerow(r)
 
