@@ -1,0 +1,12 @@
+name: demo-smoke
+on: [push, pull_request]
+jobs:
+  run-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: python -m pip install -U pip && pip install -e . PyYAML holidays python-dateutil
+      - run: python -m demo.demo_runner_timeaware samples/payment_intent_logistics_example.csv out/reco.csv calendars/cutoffs.sample.yaml --now "2025-07-15T14:30:00-04:00"
+      - run: head -n 3 out/reco.csv
