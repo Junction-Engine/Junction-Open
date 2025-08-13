@@ -45,7 +45,7 @@ head -n 5 out/recommendations_demo.csv
 ```
 
 **What you’ll see**
-- A new CSV with columns: `recommended_rail`, `recommended_payment_method` (ZLSCH), `decision_reason`, `estimated_fee`, `expected_settlement_time`, `f110_bucket` (EARLY/LATE), `must_send_before` (ISO if available).
+- A new CSV with columns: `recommended_rail`, `recommended_payment_method` (ZLSCH), `decision_reason`, `estimated_fee`, `expected_settlement_time`, `f110_bucket` (EARLY/LATE), `must_send_before` (ISO if available). `f110_bucket` (EARLY/LATE), `must_send_before` (ISO if available).
 - A console summary with **rail mix** and **estimated fees** vs a baseline.
 
 ## Repo layout
