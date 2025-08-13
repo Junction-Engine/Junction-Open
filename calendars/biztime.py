@@ -4,6 +4,16 @@ from dataclasses import dataclass
 from typing import Dict, Any, Optional
 from zoneinfo import ZoneInfo
 
+class Cutoffs:
+    # ...existing...
+    def next_cutoff(self, now: datetime, rail: str) -> datetime | None:
+        # Example: same-day ACH cutoff at 5:00 PM local; wires at 5:30 PM; RTP has no cutoff
+        if rail == "ach_same_day":
+            return self.localize(now.date(), hour=17, minute=0)   # adjust to your bank
+        if rail == "wire":
+            return self.localize(now.date(), hour=17, minute=30)  # adjust to your bank
+        return None
+
 try:
     import holidays as pyholidays
     _HAS_HOLIDAYS = True
