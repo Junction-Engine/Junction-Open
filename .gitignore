@@ -41,3 +41,7 @@ junction-core/
 
 # demo outputs
 out/
+
+.venv/
+.venv-*/
+
