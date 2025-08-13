@@ -1,4 +1,6 @@
 # Junction (Open) — SAP AP Rail Recommendation (SFTP-first)
+![Junction demo](docs/demo/junction-demo.gif)
+
 <p align="left"><img src="brand/junction-top.png" width="120" alt="Junction mark"></p>
 
 
