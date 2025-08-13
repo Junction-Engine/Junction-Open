@@ -1,5 +1,4 @@
 # Junction (Open) — SAP AP Rail Recommendation (SFTP-first)
-![Junction demo](docs/demo/junction-demo.gif)
 
 <p align="left"><img src="brand/junction-top.png" width="120" alt="Junction mark"></p>
 
@@ -28,6 +27,11 @@ into **SAP S/4HANA**. Pilot mode is **decision-only**: you keep your banks & F11
 > (OSS/IP, data handling). Do **not** upload bank details or PAN.
 
 ## Quick start (demo)
+
+### Demo (1 min)
+
+![Junction demo](docs/demo/junction-demo.gif)
+
 ```bash
 # 1) Clone and enter
 git clone <your-repo-url>.git
