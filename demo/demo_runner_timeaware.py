@@ -101,7 +101,11 @@ def main():
         reader = csv.DictReader(f)
         rows = list(reader)
 
-    out_fields = list(reader.fieldnames) + ["recommended_rail","recommended_payment_method","decision_reason","estimated_fee","expected_settlement_time"]
+    out_fields = list(reader.fieldnames) + [
+        "recommended_rail","recommended_payment_method","decision_reason",
+        "estimated_fee","expected_settlement_time",
+        "f110_bucket","must_send_before"
+    ]
     rail_counts = collections.Counter()
     total_amount = 0.0
     baseline_total_fees = 0.0
@@ -149,13 +153,7 @@ def main():
             if cut:
                 eta = cut.eta_label(now, rail)
 
-            r.update({
-                "recommended_rail": rail,
-                "recommended_payment_method": method_map[rail],
-                "decision_reason": reason,
-                "estimated_fee": fee,
-                "expected_settlement_time": eta
-            })
+            r.update({"recommended_rail": rail, "recommended_payment_method": method_map[rail], "decision_reason": reason, "estimated_fee": fee, "expected_settlement_time": eta, "f110_bucket": bucket, "must_send_before": must_before})
             w.writerow(r)
 
             rail_counts[rail] += 1
