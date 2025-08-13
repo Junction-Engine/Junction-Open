@@ -2,7 +2,6 @@
 <p align="left"><img src="brand/junction-top.png" width="120" alt="Junction mark"></p>
 
 
-<p align="left"><img src="brand/junction-top.png" width="120" alt="Junction mark"></p>
 
 [![CodeQL](docs/codeql-badge.svg)](https://github.com/Junction-Engine/Junction-Open/actions/workflows/codeql.yml)
 
